@@ -10,22 +10,19 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  dependencies:
     runs-on: git-runner
-
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      - uses: actions/checkout@v3
+      - name: Installing_dependencies
+      - run: bash dependencies.sh
+  
+  build:
+    runs-on: git-runner
+    steps:
+     - run: cd /home/ubuntu
+     - run: npm -f install
+    # - run: npm test
+     - run: cd /home/ubuntu
+     - run: pm2 -f start server.js
+
